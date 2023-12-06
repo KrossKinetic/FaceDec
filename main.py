@@ -2,13 +2,13 @@ import cv2
 import numpy as np
 from keras.models import load_model
 
-facetracker = load_model('facetracker.h5') # Huge thanks to Nicholas Renotte for his YouTube video which helped me learn how to make an image detection model.
+facetracker = load_model('facetracker.h5')
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1700)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 850)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1700) #!
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 850) #!
 while cap.isOpened():
     _ , frame = cap.read()
-    frame = frame[50:1080, 210:1920, :]
+    frame = frame[50:1080, 210:1920, :] #! -> 1080 and 1920 needs to be changed.
     old_frame = frame
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     resized = cv2.resize(rgb, (120,120))
@@ -17,8 +17,8 @@ while cap.isOpened():
     sample_coords = yhat[1][0]
     
     if yhat[0] > 0.7: # If the prediction is good, then crop.
-        valtop = list(np.multiply(sample_coords[:2], [1700,1080]).astype(int))
-        valbot = list(np.multiply(sample_coords[2:], [1700,1080]).astype(int))
+        valtop = list(np.multiply(sample_coords[:2], [1700,1080]).astype(int)) #!
+        valbot = list(np.multiply(sample_coords[2:], [1700,1080]).astype(int)) #!
         valtop = (valtop[0] - 40,valtop[1] - 80) # Adding and subtracting a few values to make the crop box slightly bigger than the actual face
         valbot = (valbot[0] + 20,valbot[1] + 60)
         # Cropping into the detected image
